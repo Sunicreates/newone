@@ -1,0 +1,1 @@
+web: gunicorn med_consult.wsgi:application --bind 0.0.0.0:$PORT 
