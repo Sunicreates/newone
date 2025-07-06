@@ -10,7 +10,12 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'unsafe-secret-key')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "https://hello-wvyg.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    'newone-yzub.onrender.com'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
