@@ -15,11 +15,11 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 def detect_emotion(text):
     """Detect emotional tone (simplified)"""
     text_lower = text.lower()
-    if any(word in text_lower for word in ["sad", "upset", "cry", "hurt", "depressed", "lonely", "alone"]):
+    if any(word in text_lower for word in ["sad", "upset", "cry", "hurt", "depressed", "lonely", "alone","bad day","bored","i hate myself","boredom","feel sad"]):
         return "sad"
-    elif any(word in text_lower for word in ["happy", "joy", "yay", "excited", "celebrate", "party"]):
+    elif any(word in text_lower for word in ["happy", "joy", "yay", "excited", "celebrate", "party","became happy","happy morning"]):
         return "happy"
-    elif any(word in text_lower for word in ["angry", "mad", "hate", "frustrated"]):
+    elif any(word in text_lower for word in ["angry", "mad", "frustrated"]):
         return "angry"
     return "neutral"
 
@@ -33,35 +33,35 @@ def chatbot_view(request):
         user_input = data.get('message', '').strip().lower()  # Convert to lowercase
         
         # First check for exact matches of commands
-        if user_input in ['hi', 'hello', 'hi there', 'greet']:
+        if user_input in ['hi', 'hello', 'hi there', 'greet','vanakam','good morning','good evening','hii','hiii','hiiii','yo','say hi','good afternoon','Goodd morning','say hi','do hi','hi emote']:
             return JsonResponse({'reply': "[H] Hello there! 👋"})
         
-        if user_input in ['dance', 'lets dance']:
+        if user_input in ['dance', 'lets dance','dance karo','dance madu','dance emote','show some moves','i am happy','can u dance','dance now','dance bro']:
             return JsonResponse({'reply': "[C] Let's dance! 💃"})
         
-        if user_input in ['jump']:
+        if user_input in ['jump','jumping','jump emote','can u jump','jump now','jump bro']:
             return JsonResponse({'reply': "[J] Jumping! 🤸"})
         
-        if user_input in ['laugh', 'that\'s funny']:
+        if user_input in ['laugh', 'that\'s funny','i made a joke','laugh now','laughhh','laughh','laughhhh','lets laugh together','laugh with me ','can u laugh']:
             return JsonResponse({'reply': "[S] Haha! 😂"})
         
-        if user_input in ['sleep', 'good night']:
+        if user_input in ['sleep', 'good night','go to sleep','sleep now','rest now','sleep with me','can u sleep']:
             return JsonResponse({'reply': "[L] Time to sleep! 😴"})
         
         # Then check for partial matches
-        if any(word in user_input for word in ['hi', 'hello', 'greet']):
+        if any(word in user_input for word in  ['hi', 'hello', 'hi there', 'greet','vanakam','good morning','good evening','hii','hiii','hiiii','yo','say hi','good afternoon','Goodd morning','say hi','do hi','hi emote']):
             return JsonResponse({'reply': "[H] Hi! How are you? 👋"})
             
-        if 'dance' in user_input:
+        if any(word in user_input for word in ['dance', 'lets dance','dance karo','dance madu','dance emote','show some moves','i am happy','can u dance','dance now','dance bro']):
             return JsonResponse({'reply': "[C] I love dancing! 💃"})
             
-        if 'jump' in user_input:
+        if any(word in user_input for word in ['jump','jumping','jump emote','can u jump','jump now','jump bro']):
             return JsonResponse({'reply': "[J] Wheee! 🤸"})
             
-        if any(word in user_input for word in ['laugh', 'funny', 'haha']):
-            return JsonResponse({'reply': "[S] That's hilarious! 😂"})
+        if any(word in user_input for word in ['laugh', 'that\'s funny','i made a joke','laugh now','laughhh','laughh','laughhhh','lets laugh together','laugh with me ','can u laugh']):
+            return JsonResponse({'reply': "[S] Hahaa! 😂"})
             
-        if any(word in user_input for word in ['sleep', 'night', 'bed']):
+        if any(word in user_input for word in ['sleep', 'good night','go to sleep','sleep now','rest now','sleep with me','can u sleep']):
             return JsonResponse({'reply': "[L] Sleep tight! 😴"})
         
         # Questions
@@ -80,7 +80,7 @@ def chatbot_view(request):
             return JsonResponse({'reply': "[I] That sounds frustrating 😠"})
         
         # Default response
-        return JsonResponse({'reply': "[I] Tell me more! 😊"})
+        return JsonResponse({'reply': "[I] Tell me more about it more! 😊"})
 
     except Exception as e:
         return JsonResponse({
