@@ -80,7 +80,9 @@ def chatbot_view(request):
             return JsonResponse({'reply': "[I] That sounds frustrating 😠"})
         
         # Default response
-        return JsonResponse({'reply': "[I] Tell me more about it more! 😊"})
+        # Default response - now using Gemini with friendly instructions
+        response = model.generate_content(f"Respond warmly and friendly to this: {user_input}")
+        return JsonResponse({'reply': f" {response.text}"})
 
     except Exception as e:
         return JsonResponse({
