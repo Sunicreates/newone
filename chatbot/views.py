@@ -11,7 +11,7 @@ from concurrent.futures import TimeoutError
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Initialize model with timeout settings (ADDED THIS LINE)
+# Initialize model with timeout settings
 model = genai.GenerativeModel(
     "gemini-1.5-flash",
     generation_config={
@@ -57,13 +57,13 @@ def chatbot_view(request):
             return JsonResponse({'reply': "[L] Time to sleep! 😴"})
         
         # Then check for partial matches
-        if any(word in user_input for word in  ['hi', 'hello', 'hi there', 'greet','vanakam','good morning','good evening','hii','hiii','hiiii','yo','say hi','good afternoon','Goodd morning','say hi','do hi','hi emote']):
+        if any(word in user_input for word in ['hi', 'hello', 'hi there', 'greet','vanakam','good morning','good evening','hii','hiii','hiiii','yo','say hi','good afternoon','Goodd morning','say hi','do hi','hi emote']):
             return JsonResponse({'reply': "[H] Hi! How are you? 👋"})
             
         if any(word in user_input for word in ['dance', 'lets dance','dance karo','dance madu','dance emote','show some moves','i am happy','can u dance','dance now','dance bro']):
             return JsonResponse({'reply': "[C] I love dancing! 💃"})
             
-        if any(word in user_input for word in ['jump','jumping','jump emote','can u jump','jump now','jump bro']:
+        if any(word in user_input for word in ['jump','jumping','jump emote','can u jump','jump now','jump bro']):
             return JsonResponse({'reply': "[J] Wheee! 🤸"})
             
         if any(word in user_input for word in ['laugh', 'that\'s funny','i made a joke','laugh now','laughhh','laughh','laughhhh','lets laugh together','laugh with me ','can u laugh']):
@@ -87,7 +87,7 @@ def chatbot_view(request):
         elif emotion == "angry":
             return JsonResponse({'reply': "[I] That sounds frustrating 😠"})
         
-        # Default response with timeout protection (MODIFIED THIS SECTION ONLY)
+        # Default response with timeout protection
         try:
             response = model.generate_content(
                 f"Respond warmly and friendly to this: {user_input}",
