@@ -7,18 +7,48 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from concurrent.futures import TimeoutError
 
-# Load environment variables
+# Load environment variables. Try default .env first, then project's 'buddy backend.env'
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+project_env = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'buddy backend.env')
+if os.path.exists(project_env):
+    load_dotenv(project_env)
 
-# Initialize model with timeout settings
-model = genai.GenerativeModel(
-    "gemini-1.5-flash",
-    generation_config={
-        "max_output_tokens": 100,  # Limit response length
-        "temperature": 0.7,
-    }
-)
+# Use the working API key from your Node.js server
+GEMINI_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyAvylVvZPtBLqZdnT9L3P_D-mKqNfiD4F0"
+AI_ENABLED = bool(GEMINI_KEY)
+
+if AI_ENABLED:
+    genai.configure(api_key=GEMINI_KEY)
+    # Use the working model from your Node.js server
+    try:
+        model = genai.GenerativeModel(
+            "gemini-2.0-flash",  # Updated to working model
+            generation_config={
+                "max_output_tokens": 150,  # Increased limit
+                "temperature": 0.7,
+            }
+        )
+        print(f"✅ AI Model gemini-2.0-flash initialized successfully")
+    except Exception as e:
+        print(f"⚠️ gemini-2.0-flash failed: {e}")
+        try:
+            # Fallback to older model
+            model = genai.GenerativeModel(
+                "gemini-1.5-flash",
+                generation_config={
+                    "max_output_tokens": 150,
+                    "temperature": 0.7,
+                }
+            )
+            print("✅ Using fallback model gemini-1.5-flash")
+        except Exception as e2:
+            print(f"❌ All models failed: {e2}")
+            AI_ENABLED = False
+            model = None
+else:
+    AI_ENABLED = False
+    model = None
+    print("❌ No GEMINI_API_KEY found")
 
 def detect_emotion(text):
     """Detect emotional tone (simplified)"""
